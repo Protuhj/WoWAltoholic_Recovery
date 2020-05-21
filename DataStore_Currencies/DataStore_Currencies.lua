@@ -25,6 +25,10 @@ local CURRENCY_ID_BFA_SOWF = 1580				-- BfA: Seals of the Wartorn Fate
 local CURRENCY_ID_BFA_DUBLOONS = 1710			-- BfA: Seafarer's Dubloon
 local CURRENCY_ID_BFA_WAR_SUPPLIES = 1587		-- BfA: War Supplies
 local CURRENCY_ID_BFA_AZERITE = 1565			-- BfA: Rich Azerite Fragment
+local CURRENCY_ID_BFA_COALESCING_VISIONS = 1755 -- BfA: Coalescing Visions
+local CURRENCY_ID_BFA_TITAN_RESIDUUM = 1718 -- Bfa: Titan Residuum
+local CURRENCY_ID_BFA_CORRUPTED_MEMENTOS = 1719 -- BfA: Corrupted Mementos
+local CURRENCY_ID_BFA_ECHOES_OF_NYALOTHA = 1803 -- BfA: Echoes of Ny'alotha
 
 local AddonDB_Defaults = {
 	global = {
@@ -120,6 +124,10 @@ local function ScanTotals()
 	ScanCurrencyTotals(CURRENCY_ID_BFA_DUBLOONS)
 	ScanCurrencyTotals(CURRENCY_ID_BFA_WAR_SUPPLIES)
 	ScanCurrencyTotals(CURRENCY_ID_BFA_AZERITE)
+	ScanCurrencyTotals(CURRENCY_ID_BFA_COALESCING_VISIONS)
+	ScanCurrencyTotals(CURRENCY_ID_BFA_TITAN_RESIDUUM)
+	ScanCurrencyTotals(CURRENCY_ID_BFA_CORRUPTED_MEMENTOS)
+	ScanCurrencyTotals(CURRENCY_ID_BFA_ECHOES_OF_NYALOTHA)
 end
 
 local function ScanCurrencies()
@@ -331,6 +339,22 @@ local function _GetBfARichAzerite(character)
 	return _GetCurrencyTotals(character, CURRENCY_ID_BFA_AZERITE)
 end
 
+local function _GetBfACoalescingVisions(character)
+    return _GetCurrencyTotals(character, CURRENCY_ID_BFA_COALESCING_VISIONS)
+end
+
+local function _GetBfATitanResiduum(character)
+    return _GetCurrencyTotals(character, CURRENCY_ID_BFA_TITAN_RESIDUUM)
+end
+
+local function _GetBfACorruptedMementos(character)
+	return _GetCurrencyTotals(character, CURRENCY_ID_BFA_CORRUPTED_MEMENTOS)
+end
+
+local function _GetBfAEchoesOfNyalotha(character)
+	return _GetCurrencyTotals(character, CURRENCY_ID_BFA_ECHOES_OF_NYALOTHA)
+end
+
 local PublicMethods = {
 	GetNumCurrencies = _GetNumCurrencies,
 	GetCurrencyInfo = _GetCurrencyInfo,
@@ -353,6 +377,10 @@ local PublicMethods = {
 	GetBfADubloons = _GetBfADubloons,
 	GetBfAWarSupplies = _GetBfAWarSupplies,
 	GetBfARichAzerite = _GetBfARichAzerite,
+	GetBfACoalescingVisions = _GetBfACoalescingVisions,
+	GetBfATitanResiduum = _GetBfATitanResiduum,
+	GetBfACorruptedMementos = _GetBfACorruptedMementos,
+	GetBfAEchoesOfNyalotha = _GetBfAEchoesOfNyalotha,
 }
 
 function addon:OnInitialize()
@@ -380,6 +408,10 @@ function addon:OnInitialize()
 	DataStore:SetCharacterBasedMethod("GetBfADubloons")
 	DataStore:SetCharacterBasedMethod("GetBfAWarSupplies")
 	DataStore:SetCharacterBasedMethod("GetBfARichAzerite")
+	DataStore:SetCharacterBasedMethod("GetBfACoalescingVisions")
+	DataStore:SetCharacterBasedMethod("GetBfATitanResiduum")
+	DataStore:SetCharacterBasedMethod("GetBfACorruptedMementos")
+	DataStore:SetCharacterBasedMethod("GetBfAEchoesOfNyalotha")
 end
 
 function addon:OnEnable()

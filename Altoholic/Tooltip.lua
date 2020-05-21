@@ -657,19 +657,34 @@ local function Hook_SetCurrencyToken(self,index,...)
 	GameTooltip:AddLine(" ",1,1,1);
 
 	local total = 0
+	-- Table for sorting the list by the amount of currency each character has (Descending)
+	local sorted = {}
+
 	for _, character in pairs(DataStore:GetCharacters()) do
 		local _, _, count = DataStore:GetCurrencyInfoByName(character, currency)
 		if count and count > 0 then
-			GameTooltip:AddDoubleLine(DataStore:GetColoredCharacterName(character),  colors.teal .. count);
+			table.insert(sorted, character)
 			total = total + count
 		end
-		
 	end
-	
+	-- Sort the data from greatest to least
+	table.sort(sorted, function(a,b)
+			local _, _, countA = DataStore:GetCurrencyInfoByName(a, currency)
+			local _, _, countB = DataStore:GetCurrencyInfoByName(b, currency)
+			return countA > countB
+	end)
+	-- Now add to the tooltip
+	for _, character in pairs(sorted) do
+		local _, _, count = DataStore:GetCurrencyInfoByName(character, currency)
+		-- Use BreakUpLargeNumbers to add a thousands separator to make numbers easier to read quickly
+		GameTooltip:AddDoubleLine(DataStore:GetColoredCharacterName(character),  colors.teal .. BreakUpLargeNumbers(count));
+	end
+
 	if total > 0 then
 		GameTooltip:AddLine(" ",1,1,1);
 	end
-	GameTooltip:AddLine(format("%s: %s", colors.gold..L["Total owned"], colors.teal..total ) ,1,1,1);
+	-- Use BreakUpLargeNumbers to add a thousands separator to make numbers easier to read quickly
+	GameTooltip:AddLine(format("%s: %s", colors.gold..L["Total owned"], colors.teal.. BreakUpLargeNumbers(total) ) ,1,1,1);
 	GameTooltip:Show()
 end
 

@@ -133,10 +133,9 @@ local callbacks = {
 				
 				if count >= 100000 then
 					count = format("%2.1fM", count/1000000)
-				elseif count >= 10000 then
-					count = format("%2.0fk", count/1000)
 				elseif count >= 1000 then
-					count = format("%2.1fk", count/1000)
+					-- %2.1fk doesn't render correctly, so just collapse the 1000 and 10000 cases
+					count = format("%2.0fk", count/1000)
 				end
 				
 				button.Name:SetText(colors.green..count)
@@ -157,7 +156,7 @@ local callbacks = {
 			AltoTooltip:AddLine(DataStore:GetColoredCharacterName(character))
 			-- AltoTooltip:AddLine(view[frame:GetParent():GetID()], 1, 1, 1)
 			AltoTooltip:AddLine(view[frame:GetID()], 1, 1, 1)
-			AltoTooltip:AddLine(colors.green..frame.count)
+			AltoTooltip:AddLine(colors.green.. BreakUpLargeNumbers(frame.count))
 			AltoTooltip:Show()
 		end,
 	OnClick = nil,

@@ -51,7 +51,7 @@ local function FilterName()
 end
 
 local function FilterMinimumLevel()
-	local minLevel = searchedItem["itemMinLevel"]
+	local minLevel = searchedItem["itemMinLevel"] or 0
 	if minLevel == 0 then
 		if addon:GetOption("UI.Tabs.Search.IncludeNoMinLevel") then
 			return true		-- include items with no minimum requireement

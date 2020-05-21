@@ -238,6 +238,82 @@ local factions = {
  
 }
 
+-- Mapping the soulbound/BoA items to their associated factions
+local itemIDToFactionID = {
+-- MOP
+  [94225] = 1341,  -- August Celestials
+  [94227] = 1269,  -- Golden Lotus
+  [94226] = 1337,  -- Klaxxi
+  [94223] = 1270,  -- Shado-Pan
+-- MOP end
+
+-- Legion
+	[152954] = 2170, -- Argussian Reach
+	[152959] = 2170, -- Argussian Reach
+	[152960] = 2170, -- Argussian Reach
+	[152961] = 2170, -- Argussian Reach
+
+  [152955] = 2165, -- Army of the Light
+  [152956] = 2165, -- Army of the Light
+  [152957] = 2165, -- Army of the Light
+  [152958] = 2165, -- Army of the Light
+
+  [139023] = 1900, -- Court of Farondis
+  [141340] = 1900, -- Court of Farondis
+  [141989] = 1900, -- Court of Farondis
+  [146937] = 1900, -- Court of Farondis
+  [146943] = 1900, -- Court of Farondis
+  [147410] = 1900, -- Court of Farondis
+  [150927] = 1900, -- Court of Farondis
+  
+  [139021] = 1883, -- Dreamweavers
+  [141339] = 1883, -- Dreamweavers
+  [141988] = 1883, -- Dreamweavers
+  [146936] = 1883, -- Dreamweavers
+  [146942] = 1883, -- Dreamweavers
+  [147411] = 1883, -- Dreamweavers
+  [150926] = 1883, -- Dreamweavers
+
+	[139024] = 1828, -- Highmountain Tribes
+	[141341] = 1828, -- Highmountain Tribes
+	[141990] = 1828, -- Highmountain Tribes
+	[146938] = 1828, -- Highmountain Tribes
+	[146944] = 1828, -- Highmountain Tribes
+	[147412] = 1828, -- Highmountain Tribes
+	[150928] = 1828, -- Highmountain Tribes
+
+  [146949] = 2045, -- Legionfall
+  [146950] = 2045, -- Legionfall
+  [147727] = 2045, -- Legionfall
+  [152464] = 2045, -- Legionfall
+
+  [139026] = 1859, -- Nightfallen
+  [141343] = 1859, -- Nightfallen
+  [141992] = 1859, -- Nightfallen
+  [146940] = 1859, -- Nightfallen
+  [146946] = 1859, -- Nightfallen
+  [147413] = 1859, -- Nightfallen
+  [150930] = 1859, -- Nightfallen
+
+  [139020] = 1948, -- Valarjar
+  [141987] = 1948, -- Valarjar
+  [141338] = 1948, -- Valarjar
+  [146935] = 1948, -- Valarjar
+  [146941] = 1948, -- Valarjar
+  [147414] = 1948, -- Valarjar
+  [150925] = 1948, -- Valarjar
+
+  [139025] = 1894, -- Wardens
+  [141342] = 1894, -- Wardens
+  [141991] = 1894, -- Wardens
+  [146939] = 1894, -- Wardens
+  [146945] = 1894, -- Wardens
+  [147415] = 1894, -- Wardens
+  [150929] = 1894, -- Wardens
+
+-- Legion end
+}
+
 local FactionUIDsRev = {}
 local FactionIdToName = {}
 
@@ -449,6 +525,13 @@ local function _GetFactionName(id)
 	return FactionIdToName[id]
 end
 
+local function _GetFactionIDFromItemID(itemID)
+	if itemID then
+		return itemIDToFactionID[itemID]
+	end
+	return nil
+end
+
 local PublicMethods = {
 	GetReputationInfo = _GetReputationInfo,
 	GetRawReputationInfo = _GetRawReputationInfo,
@@ -457,6 +540,7 @@ local PublicMethods = {
 	GetReputationLevels = _GetReputationLevels,
 	GetReputationLevelText = _GetReputationLevelText,
 	GetFactionName = _GetFactionName,
+	GetFactionIDFromItemID = _GetFactionIDFromItemID,
 }
 
 function addon:OnInitialize()

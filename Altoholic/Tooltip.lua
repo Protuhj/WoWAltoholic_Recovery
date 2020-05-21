@@ -609,6 +609,31 @@ local function ProcessTooltip(tooltip, link)
 	end	
 end
 
+local function addTooltipAltRep(factionName)
+	local sorted={}
+	for characterName, character in pairs(DataStore:GetCharacters()) do
+		local _,_, top = DataStore:GetReputationInfo(character, factionName)
+		if top and top > 0 then
+			table.insert(sorted, character)
+		end
+	end
+	table.sort(sorted, function(a,b)
+		local _, _, earnedA = DataStore:GetRawReputationInfo(a, factionName)
+		local _, _, earnedB = DataStore:GetRawReputationInfo(b, factionName)
+		return earnedA > earnedB
+	end)
+	if (#sorted > 0) then
+		GameTooltip:AddLine("Alt Reputations for " .. factionName)
+	end
+	for _, v in pairs(sorted) do
+		local rank, cur, top = DataStore:GetReputationInfo(v, factionName)
+		GameTooltip:AddDoubleLine(DataStore:GetColoredCharacterName(v),  format("%6s / %6s - %10s", BreakUpLargeNumbers(cur), BreakUpLargeNumbers(top), rank));
+	end
+	if #sorted > 0 then
+		GameTooltip:Show()
+  end
+end
+
 local function Hook_LinkWrangler(frame)
 	local _, link = frame:GetItem()
 	if link then
@@ -620,6 +645,22 @@ end
 local function OnGameTooltipShow(tooltip, ...)
 	ShowGatheringNodeCounters()
 	GameTooltip:Show()
+end
+
+-- Handles mousing over the Reputation Bar
+--TODO: Control via an option
+local function repBarOnEnter(self)
+	if self.LFGBonusRepButton and self.LFGBonusRepButton.factionID then
+		local factionName = GetFactionInfoByID(self.LFGBonusRepButton.factionID)
+		if factionName then
+			if GameTooltip:GetOwner() ~= self then
+				GameTooltip:SetOwner(self,"ANCHOR_NONE")
+				GameTooltip:SetPoint("TOPLEFT",self,"BOTTOMRIGHT")
+			end
+			--GameTooltip:AddLine("Alt Reputations for " .. factionName)
+			addTooltipAltRep(factionName)
+		end
+	end
 end
 
 local function OnGameTooltipSetItem(tooltip, ...)
@@ -638,6 +679,9 @@ local function OnGameTooltipSetItem(tooltip, ...)
 		
 		if link then
 			ProcessTooltip(tooltip, link)
+			--TODO: Control via an option
+			local factionID = DataStore:GetFactionIDFromItemID(addon:GetIDFromLink(link))
+			if factionID then addTooltipAltRep(GetFactionInfoByID(factionID)) end
 		end
 	end
 end
@@ -756,6 +800,15 @@ function addon:InitTooltip()
 	-- install all method hooks
 	for m, hooks in pairs(tooltipMethodHooks) do
 		InstallHook(GameTooltip, m, hooks[1], hooks[2])
+	end
+
+	-- install Reputation Bar hooks
+	for n=1,NUM_FACTIONS_DISPLAYED do
+		if _G["ReputationBar"..n] then
+			_G["ReputationBar"..n]:HookScript("OnEnter",function(self)
+				repBarOnEnter(self)
+			end)
+		end
 	end
 
 	-- script hooks

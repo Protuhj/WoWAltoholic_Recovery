@@ -532,7 +532,6 @@ function addon:GetCharacters(realm, account)
 			end
 		end
 	end
-
 	return out
 end
 

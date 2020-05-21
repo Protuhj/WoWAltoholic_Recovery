@@ -411,7 +411,6 @@ function addon.Tabs:OnClick(index)
 		
 		local parentLevel = AltoholicFrame:GetFrameLevel()
 		local childName = format("%sTab%s", addonName, tabList[index])
-
 		local tabFrame = _G[ childName ]
 		
 		if tabFrame then

@@ -188,7 +188,7 @@ function ns:Update()
 				local category = categories[p.parentIndex]
 				local class = category.class
 				local subClass = category.subClasses[p.dataIndex]
-			
+
 				menuButton.Text:SetText("|cFFBBFFBB   " .. GetItemSubClassInfo(class, subClass))
 				menuButton:SetScript("OnClick", Item_OnClick)
 				menuButton.itemTypeIndex = p.parentIndex

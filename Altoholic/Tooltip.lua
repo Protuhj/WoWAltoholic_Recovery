@@ -757,7 +757,6 @@ function addon:InitTooltip()
 		LinkWrangler.RegisterCallback ("Altoholic",  Hook_LinkWrangler, "refresh")
 	end
 end
-
 function addon:RefreshTooltip()
 	cachedItemID = nil	-- putting this at NIL will force a tooltip refresh in self:ProcessToolTip
 end

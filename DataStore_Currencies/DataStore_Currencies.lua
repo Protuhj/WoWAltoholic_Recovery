@@ -36,7 +36,7 @@ local AddonDB_Defaults = {
 			HeadersRev = {},		-- reverse lookup of Headers
 		},
 		Characters = {
-			['*'] = {				-- ["Account.Realm.Name"] 
+			['*'] = {				-- ["Account.Realm.Name"]
 				lastUpdate = nil,
 				Currencies = {},
 				CurrencyInfo = {},
@@ -64,7 +64,7 @@ local headerCount
 local function SaveHeaders()
 	headersState = {}
 	headerCount = 0		-- use a counter to avoid being bound to header names, which might not be unique.
-	
+
 	for i = GetCurrencyListSize(), 1, -1 do		-- 1st pass, expand all categories
 		local _, isHeader, isExpanded = GetCurrencyListInfo(i)
 		if isHeader then
@@ -96,12 +96,12 @@ end
 local function ScanCurrencyTotals(id, divWeekly, divTotal)
 	local denomWeekly = divWeekly or 1
 	local denomTotal = divTotal or 1
-	
+
 	local _, amount, _, earnedThisWeek, weeklyMax, totalMax = GetCurrencyInfo(id)
-	
+
 	weeklyMax = math.floor(weeklyMax / denomWeekly)
 	totalMax = math.floor(totalMax / denomTotal)
-	
+
 	addon.ThisCharacter.CurrencyInfo[id] = format("%s-%s-%s-%s", amount or 0, earnedThisWeek or 0, weeklyMax or 0, totalMax or 0)
 end
 
@@ -124,17 +124,17 @@ end
 
 local function ScanCurrencies()
 	SaveHeaders()
-	
+
 	local ref = addon.db.global.Reference
 	local currencies = addon.ThisCharacter.Currencies
 	wipe(currencies)
-	
+
 	local attrib, refIndex
-	
-	
+
+
 	for i = 1, GetCurrencyListSize() do
 		local name, isHeader, _, _, _, count, icon = GetCurrencyListInfo(i)
-		
+
 		if not ref.CurrencyTextRev[name] then		-- currency does not exist yet in our reference table
 			table.insert(ref.Currencies, format("%s|%s", name, icon or "") )			-- ex; [3] = "PVP"
 			ref.CurrencyTextRev[name] = #ref.Currencies		-- ["PVP"] = 3
@@ -143,36 +143,36 @@ local function ScanCurrencies()
 		-- bit 0 : isHeader
 		-- bits 1-6 : index in the reference table (up to 64 values, should leave room for some time)
 		-- bits 7- : count
-		
+
 		if isHeader then
 			attrib = 1
 			count = 0
 		else
 			attrib = 0
 		end
-		
+
 		attrib = attrib + LeftShift(ref.CurrencyTextRev[name], 1)	-- index in the ref table
 		attrib = attrib + LeftShift(count, 7)	-- item count
 
 		currencies[i] = attrib
 	end
-	
+
 	RestoreHeaders()
 	ScanTotals()
-	
+
 	addon.ThisCharacter.lastUpdate = time()
 end
 
 local function ScanArcheology()
 	local currencies = addon.ThisCharacter.Archeology
 	wipe(currencies)
-	
+
 	for i = 1, GetNumArchaeologyRaces() do
 		-- Warning for extreme caution here: while testing MoP, the following line of code triggered an error while trying to activate a glyph.
 		-- _, _, _, currencies[i] = GetArchaeologyRaceInfo(i)
 		-- The work around is to simply unroll the code on two lines.. I'll have to investigate why
 		-- At first sight, the problem seems to come from addressing the table element direcly, same has happened in DataStore_Stats.
-		
+
 		local _, _, _, n = GetArchaeologyRaceInfo(i)
 		currencies[i] = n
 	end
@@ -208,27 +208,27 @@ end
 local function _GetCurrencyInfo(character, index)
 	local ref = addon.db.global.Reference
 	local currency = character.Currencies[index]
-	
-	
+
+
 	local isHeader = bAnd(currency, 1)
 	isHeader = (isHeader == 1) and true or nil
-	
+
 	local refIndex = bAnd(RightShift(currency, 1), 63)
 	local count = RightShift(currency, 7)
 
 	local info = ref.Currencies[refIndex]
 	local name, icon = strsplit("|", info or "")
-	
+
 	return isHeader, name, count, icon
 end
 
 local function _GetCurrencyInfoByName(character, token)
 	local ref = addon.db.global.Reference
-	
+
 	local isHeader, name, count, icon
 	for i = 1, #character.Currencies do
 		isHeader, name, count, icon = _GetCurrencyInfo(character, i)
-	
+
 		if name == token then
 			return isHeader, name, count, icon
 		end
@@ -237,12 +237,12 @@ end
 
 local function _GetCurrencyItemCount(character, searchedID)
 	return 0		-- quick workaround / temporary fix
-	
+
 	-- local isHeader, id, count
-	
+
 	-- for i = 1, #character.Currencies do
 		-- isHeader, id, count = strsplit("|", character.Currencies[i])
-	
+
 		-- if isHeader == "1" then
 			-- if tonumber(id) == searchedID then
 				-- return tonumber(count)
@@ -260,7 +260,7 @@ local function _GetCurrencyTotals(character, id)
 	if not info then
 		return 0, 0, 0, 0
 	end
-	
+
 	local amount, earnedThisWeek, weeklyMax, totalMax = strsplit("-", info)
 	return tonumber(amount), tonumber(earnedThisWeek), tonumber(weeklyMax), tonumber(totalMax)
 end
@@ -278,7 +278,7 @@ local function _GetValorPointsPerWeek(character)
 	if not info then
 		return 0
 	end
-	
+
 	local _, earnedThisWeek = strsplit("-", info)
 	return tonumber(earnedThisWeek)
 end
@@ -386,7 +386,7 @@ function addon:OnEnable()
 	addon:RegisterEvent("PLAYER_ALIVE", OnPlayerAlive)
 	addon:RegisterEvent("CURRENCY_DISPLAY_UPDATE", OnCurrencyDisplayUpdate)
 	addon:RegisterEvent("CHAT_MSG_SYSTEM", OnChatMsgSystem)
-	
+
 	local _, _, arch = GetProfessions()
 
 	if arch then

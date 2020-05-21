@@ -1573,6 +1573,8 @@ columns["CurrencyLegionWarSupplies"] = {
 	JustifyH = "CENTER",
 	GetText = function(character)
 			local amount, _, _, totalMax = DataStore:GetCurrencyTotals(character, CURRENCY_ID_LFWS)
+			if not amount then amount = 0 end
+			if not totalMax then totalMax = 0 end
 			local color = (amount == 0) and colors.grey or colors.white
 			
 			return format("%s%s%s/%s%s", color, amount, colors.white, colors.yellow, totalMax)
@@ -1594,6 +1596,8 @@ columns["CurrencySOBF"] = {
 	JustifyH = "CENTER",
 	GetText = function(character)
 			local amount, _, _, totalMax = DataStore:GetCurrencyTotals(character, CURRENCY_ID_SOBF)
+			if not amount then amount = 0 end
+			if not totalMax then totalMax = 0 end
 			local color = (amount == 0) and colors.grey or colors.white
 			
 			return format("%s%s%s/%s%s", color, amount, colors.white, colors.yellow, totalMax)
@@ -1689,7 +1693,7 @@ columns["CurrencyBfAWarResources"] = {
 	Width = 80,
 	JustifyH = "CENTER",
 	GetText = function(character)
-			local amount = DataStore:GetCurrencyTotals(character, CURRENCY_ID_BFA_WAR_RES)
+			local amount = DataStore:GetCurrencyTotals(character, CURRENCY_ID_BFA_WAR_RES) or 0
 			local color = (amount == 0) and colors.grey or colors.white
 			
 			return format("%s%s", color, amount)
@@ -1711,6 +1715,8 @@ columns["CurrencyBfASOWF"] = {
 	JustifyH = "CENTER",
 	GetText = function(character)
 			local amount, _, _, totalMax = DataStore:GetCurrencyTotals(character, CURRENCY_ID_BFA_SOWF)
+			if not amount then amount = 0 end
+			if not totalMax then totalMax = 0 end
 			local color = (amount == 0) and colors.grey or colors.white
 			
 			return format("%s%s%s/%s%s", color, amount, colors.white, colors.yellow, totalMax)
@@ -1731,7 +1737,7 @@ columns["CurrencyBfADubloons"] = {
 	Width = 80,
 	JustifyH = "CENTER",
 	GetText = function(character)
-			local amount = DataStore:GetCurrencyTotals(character, CURRENCY_ID_BFA_DUBLOONS)
+			local amount = DataStore:GetCurrencyTotals(character, CURRENCY_ID_BFA_DUBLOONS) or 0
 			local color = (amount == 0) and colors.grey or colors.white
 			
 			return format("%s%s", color, amount)
@@ -1753,8 +1759,9 @@ columns["CurrencyBfAWarSupplies"] = {
 	JustifyH = "CENTER",
 	GetText = function(character)
 			local amount, _, _, totalMax = DataStore:GetCurrencyTotals(character, CURRENCY_ID_BFA_WAR_SUPPLIES)
+			if not amount then amount = 0 end
+			if not totalMax then totalMax = 0 end
 			local color = (amount == 0) and colors.grey or colors.white
-			
 			return format("%s%s%s/%s%s", color, amount, colors.white, colors.yellow, totalMax)
 		end,
 }
@@ -1774,8 +1781,9 @@ columns["CurrencyBfARichAzerite"] = {
 	JustifyH = "CENTER",
 	GetText = function(character)
 			local amount, _, _, totalMax = DataStore:GetCurrencyTotals(character, CURRENCY_ID_BFA_AZERITE)
+			if not amount then amount = 0 end
+			if not totalMax then totalMax = 0 end
 			local color = (amount == 0) and colors.grey or colors.white
-			
 			return format("%s%s%s/%s%s", color, amount, colors.white, colors.yellow, totalMax)
 		end,
 }
